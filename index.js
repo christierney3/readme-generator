@@ -1,19 +1,20 @@
-// TODO: Include packages needed for this application
+const generateMarkdown = require('./utils/generateMarkdown.js')
+// Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require('fs');
 
-// Include our own generateMarkdown file
-const markdown = require('./utils/generateMarkdown.js')
+let filePath = './examples/README.md'
 
-// TODO: Create an array of questions for user input
+
+// Create an array of questions for user input
 const questions = [
     {
         type: 'input',
         message: 'Enter your github username.',
         name: 'username',
         default: 'christierney3',
-        validate: function (response) {
-            if (response.length < 3) {
+        validate: function (answer) {
+            if (answer.length < 3) {
                 return console.log('Please enter a valid username.');
             } else {
                 return true
@@ -25,8 +26,8 @@ const questions = [
         message: 'Enter your email address.',
         name: 'email',
         default: 'chris.tierney3@gmail.com',
-        validate: function (response) {
-            if (response.length < 3) {
+        validate: function (answer) {
+            if (answer.length < 3) {
                 return console.log('Please enter a valid email address.');
             } else {
                 return true
@@ -38,8 +39,8 @@ const questions = [
         message: 'Enter the title of your project.',
         name: 'title',
         default: 'Best Project Ever',
-        validate: function (response) {
-            if (response.length < 1) {
+        validate: function (answer) {
+            if (answer.length < 1) {
                return console.log('Please enter a valid title for your project.');
             } else {
                 return true
@@ -51,8 +52,8 @@ const questions = [
         message: 'Enter a description for your project.',
         name: 'description',
         default: 'Description',
-        validate: function (response) {
-            if (response.length < 3) {
+        validate: function (answer) {
+            if (answer.length < 3) {
                return console.log('Please enter a valid description for your project.');
             } else {
                 return true
@@ -70,13 +71,9 @@ const questions = [
         name: 'usage',
     },
     {
-        type: 'input',
-        message: '',
-        name: '',
-    },
-    {
         type: 'list',
         message: 'Select which license you would like for your project.',
+        choices: ['Apache License 2.0', 'MIT License', 'The Unlicense'],
         name: 'license',
     },
     {
@@ -91,34 +88,25 @@ const questions = [
     },
 ];
 
-// TODO: Create a function to write README file
+// Create a function to write README file
 function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, err => {
-        if (err) {
-            return console.log(err);
-        } else console.log('Your README file has succesfully generated');
+    fs.writeFile(fileName, generateMarkdown(data), err => {
+        console.log(err);
     })
 }
 
-// TODO: Create a function to initialize app
-async function init() {
-    try {
-        // set values to call on inquirer to prompt our questions
-        const responses = await inquirer.prompt(questions);
-        console.log('Your responses: ', responses);
 
-        // generate readme through our generate markdown file
-        const genMarkdown = markdown(responses);
-        console.log(genMarkdown);
 
-        // Append file to example README
-
-        fs.appendFile('example.md', genMarkdown);
-        
-    } catch (err) {
-        console.log(error);
-    }
-};
+// Create a function to initialize app
+function init() {
+        //call on inquirer to prompt our questions
+        inquirer.prompt(questions)
+            .then(response => {
+                console.log('Your responses: ', response);
+                //const markdown = markdown(response);
+                writeToFile(filePath, response);
+            });
+}
 
 // Function call to initialize app
 init();
