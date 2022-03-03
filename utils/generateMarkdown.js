@@ -1,44 +1,46 @@
 // TODO: Create a function to generate markdown for README
-function generateMarkdown({title, description, installation, usage, license, username, email, tests, contributing}) {
+function generateMarkdown(data) {
 
-  // Create Table of Contents
-  let tableOfContents = 'Table of Contents';
-
-  // Create conditionals if an area is left blank
-
-  if (installation !== '') {
-    tableOfContents += `*[Installation](#installtion)`
-  };
-
-  if (usage !== '') {
-    tableOfContents += `*[Usage](#usage)`
-  };
-
-  if (contributing !== '') {
-    tableOfContents += `*[Contributing](#contributing)`
-  };
-
-  if (tests !== '') {
-    tableOfContents += `*[Tests](#tests)`
-  };
-
-`## ${title}
-
-## ${description}
-  
-[![License](https://img.shields.io/badge/License-${license}-blue.svg)](https://opensource.org/licenses/${license})
+return `
+## ${data.title}
 
 
-## ${tableOfContents}
+![License](https://img.shields.io/badge/License-${data.license}-blue.svg)
 
-## ${installation}
+## License description: (https://opensource.org/licenses/${data.license})
 
-## ${usage}
+## Description:
+${data.description}
 
-## ${contributing}
 
-## ${tests}
-]`
+## Table of Contents
+* [Description](#description)
+* [Installtion](#installation)
+* [Usage Info](#usage)
+* [Contributions](#contributing)
+* [Testing](#tests)
+* [Questions](#questions)
+
+
+## Installation: 
+${data.installation}
+
+
+## Usage: 
+${data.usage}
+
+
+## Contributions: 
+${data.contributing}
+
+
+## Tests: 
+${data.tests}
+
+
+## Questions:
+If you have any questions please contact me at ${data.email} or https://github.com/${data.username}
+`
 
 
 }

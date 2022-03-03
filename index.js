@@ -3,8 +3,6 @@ const generateMarkdown = require('./utils/generateMarkdown.js')
 const inquirer = require('inquirer');
 const fs = require('fs');
 
-let filePath = './examples/README.md'
-
 
 // Create an array of questions for user input
 const questions = [
@@ -64,48 +62,45 @@ const questions = [
         type: 'input',
         message: 'If installation is required for your project describe the steps here.',
         name: 'installation',
+        default: 'This is a description of the installation process needed to run the generator',
     },
     {
         type: 'input',
         message: 'Enter usage information here.',
         name: 'usage',
+        default: 'This is a usage information section',
     },
     {
         type: 'list',
         message: 'Select which license you would like for your project.',
-        choices: ['Apache License 2.0', 'MIT License', 'The Unlicense'],
+        choices: ['Apache2.0', 'MIT', 'Unlicense'],
         name: 'license',
+        default: 'MIT',
     },
     {
         type: 'input',
         message: 'If you would like to allow contributors enter how to do so here.',
         name: 'contributing',
+        default: 'Contributing is open to anyone!'
     },
     {
         type: 'input',
         message: 'Enter information on any tests you have used in your project.',
         name: 'tests',
+        default: 'These tests were run:'
     },
 ];
-
-// Create a function to write README file
-function writeToFile(fileName, data) {
-    fs.writeFile(fileName, generateMarkdown(data), err => {
-        console.log(err);
-    })
-}
-
-
 
 // Create a function to initialize app
 function init() {
         //call on inquirer to prompt our questions
         inquirer.prompt(questions)
-            .then(response => {
-                console.log('Your responses: ', response);
-                //const markdown = markdown(response);
-                writeToFile(filePath, response);
-            });
+            .then((answers) => 
+                fs.writeFile('./examples/README.md', generateMarkdown(answers), function (err) {
+                    if (err) throw err;
+                }))
+                    .then(() => console.log('README succesfully generated.'))
+                    .catch((err) => console.log(err));
 }
 
 // Function call to initialize app
